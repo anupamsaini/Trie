@@ -11,7 +11,7 @@ public class PatriciaTrieManager {
 
   private static final PatriciaTrie pTrie = new PatriciaTrie(new NodeEntry());
   private static final String FILE_PATH =
-      "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/wordsList";
+      "enter the word list path here.";
 
   private static final List<String> words = TrieGenerator.readWords(FILE_PATH);
 
