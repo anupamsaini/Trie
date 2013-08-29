@@ -9,10 +9,17 @@ import java.util.Queue;
  */
 public class Util {
 
-  public static int getMatchingCharacterCount(String key1, String key2) {
+  /**
+   * Generates a count of characters matching between two strings.
+   *
+   * @param to The first string.
+   * @param from The second string.
+   * @return The count of matched characters.
+   */
+  public static int getMatchingCharacterCount(String to, String from) {
     int matchingCharCount = 0;
-    for (int i = 0; i < Math.min(key1.length(), key2.length()); i++) {
-      if (key1.charAt(i) != key2.charAt(i)) {
+    for (int i = 0; i < Math.min(to.length(), from.length()); i++) {
+      if (to.charAt(i) != from.charAt(i)) {
         return matchingCharCount;
       }
       ++matchingCharCount;

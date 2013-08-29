@@ -1,7 +1,5 @@
 package com.anupam.java.tries.simple;
 
-import com.anupam.java.tries.simple.Trie.Node;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -47,14 +45,14 @@ public class Util {
     return value.substring(1);
   }
 
-  public static void prettyPrint(Node root) {
-    Queue<Node> toBePrinted = new LinkedList<Node>();
+  public static void prettyPrint(NodeEntry root) {
+    Queue<NodeEntry> toBePrinted = new LinkedList<NodeEntry>();
     toBePrinted.add(root);
     while (!toBePrinted.isEmpty()) {
-      Node node = toBePrinted.poll();
+      NodeEntry node = toBePrinted.poll();
       if (null != node) {
         System.out.println(node);
-        for (Node childNode : node.getChildern()) {
+        for (NodeEntry childNode : node.getChildern()) {
           toBePrinted.offer(childNode);
         }
       }

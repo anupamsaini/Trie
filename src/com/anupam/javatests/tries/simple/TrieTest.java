@@ -1,19 +1,21 @@
 package com.anupam.javatests.tries.simple;
 
-import com.anupam.java.tries.simple.Trie;
-import com.anupam.java.tries.simple.Trie.Node;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import com.anupam.java.tries.simple.NodeEntry;
+import com.anupam.java.tries.simple.SimpleTrie;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
- * Test case for {@link Trie}.
+ * Test case for {@link SimpleTrie}.
  */
 public class TrieTest {
 
-  private Node root;
-  private Trie trie;
+  private NodeEntry root;
+  private SimpleTrie trie;
   private static final String[] words = {"word", "bird", "scatterman", "lemmings", "hastings"};
 
   /**
@@ -21,28 +23,28 @@ public class TrieTest {
    */
   @Before
   public void setUp() throws Exception {
-    root = new Node();
-    trie = new Trie();
+    root = new NodeEntry();
+    trie = new SimpleTrie();
     for (int i = 0; i < words.length; i++) {
-      trie.addNode(root, words[i], "dummy");
+      trie.insertWord(root, words[i], "dummy");
     }
   }
 
   @Test
   public void testAddNode_Success() {
-    assertTrue(trie.addNode(root, "test", "dummy"));
+    assertTrue(trie.insertWord(root, "test", "dummy"));
   }
 
   @Test
   public void testAddNodeMultipleWords_Success() {
     for (int i = 0; i < words.length; i++) {
-      assertTrue(trie.addNode(root, words[i], "dummy"));
+      assertTrue(trie.insertWord(root, words[i], "dummy"));
     }
   }
 
   @Test
   public void testAddNode_Failure() {
-    assertFalse(trie.addNode(root, "$$", "dummy"));
+    assertFalse(trie.insertWord(root, "$$", "dummy"));
   }
 
   @Test

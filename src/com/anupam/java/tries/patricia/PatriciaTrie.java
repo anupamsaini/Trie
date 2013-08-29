@@ -13,6 +13,7 @@ public class PatriciaTrie {
 
   private final NodeEntry rootNode;
   private int maxRecursionLevel = 0;
+  private int countOfAllocatedNodes = 0;
 
   public PatriciaTrie(NodeEntry root) {
     this.rootNode = root;
@@ -20,6 +21,10 @@ public class PatriciaTrie {
 
   public NodeEntry getRoot() {
     return this.rootNode;
+  }
+
+  public int getCountOfAllocatedNodes() {
+    return countOfAllocatedNodes;
   }
 
   /**
@@ -42,7 +47,7 @@ public class PatriciaTrie {
   }
 
   /**
-   * Insert a new child node to the node, when none of the key's characters match with the node's
+   * Insert a new child node to the node when none of the key's characters, match with the node's
    * key characters.
    *
    * @param parentNode The parent node at which the child node would be added.
@@ -51,11 +56,12 @@ public class PatriciaTrie {
    * @return boolean Indicates the insert operation's status.
    */
   private boolean insertWhenNoCharsMatch(NodeEntry parentNode, String key, String value) {
-    return parentNode.addChildNode(new NodeEntry(key, value));
+    ++countOfAllocatedNodes;
+    return parentNode.addChildNode(new NodeEntry(key, value, true));
   }
 
   /**
-   * Insert a new entry into the trie.
+   * Inserts a new node into the trie.
    *
    * @param key The key to be inserted.
    * @param value The value or meaning of the word.
@@ -81,6 +87,7 @@ public class PatriciaTrie {
       return insertWhenNoCharsMatch(node, key, value);
     } else if (key.equalsIgnoreCase(matchingNodeWrapper.getNode().getKey())) {
       node.setValue(value);
+      node.setIsWord(true);
       return true;
     }
 
@@ -98,12 +105,13 @@ public class PatriciaTrie {
       return insertNode(matchingNode, key.substring(matchingChars), value, ++recursionLevel);
     }
 
-    NodeEntry childNode = new NodeEntry(subString, matchingNode.getValue());
+    NodeEntry childNode = new NodeEntry(subString, matchingNode.getValue(), true);
     childNode.setChildren(matchingNode.getChildren());
     matchingNode.setKey(matchingNode.getKey().substring(0, matchingChars));
     matchingNode.setValue("");
     matchingNode.setChildren(new ArrayList<NodeEntry>());
     matchingNode.addChildNode(childNode);
+    ++countOfAllocatedNodes;
 
     return insertNode(matchingNode, key.substring(matchingChars), value, ++recursionLevel);
   }
@@ -114,15 +122,18 @@ public class PatriciaTrie {
    * @param key The key to be searched.
    * @return The flag indicating search operation's status.
    */
-  public boolean searchKey(String key) {
+  public boolean searchKey(String key) throws IllegalStateException {
     return searchKey(key, rootNode);
   }
 
-  private boolean searchKey(String key, NodeEntry node) {
+  private boolean searchKey(String key, NodeEntry node) throws IllegalStateException {
     MatchingNodeWrapper matchingNodeWrapper = countMatchingChars(key, node);
     if (null == matchingNodeWrapper.getNode()) {
       return false;
     } else if (matchingNodeWrapper.getMatchingCharsCount() == key.length()) {
+      if (!matchingNodeWrapper.hasNode()) {
+        throw new IllegalStateException("Keys matched, but node is not ending a word.");
+      }
       return true;
     } else {
       String subString = key.substring(matchingNodeWrapper.getMatchingCharsCount());

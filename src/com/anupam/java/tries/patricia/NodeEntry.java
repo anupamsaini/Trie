@@ -2,13 +2,15 @@ package com.anupam.java.tries.patricia;
 
 import com.google.common.base.Preconditions;
 
+import com.anupam.java.tries.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A node in the patricia tree.
  */
-public class NodeEntry {
+public class NodeEntry implements Node {
 
   private List<NodeEntry> children = new ArrayList<NodeEntry>();
 
@@ -17,14 +19,24 @@ public class NodeEntry {
   private String value = "";
   private String key = "";
   private int treeDepthLevel = 0;
+  private boolean isWord;
 
   public NodeEntry() {}
 
-  public NodeEntry(String key, String value) {
+  public NodeEntry(String key, String value, boolean isWord) {
     Preconditions.checkNotNull(value);
     Preconditions.checkNotNull(key);
     this.key = key;
     this.value = value;
+    this.isWord = isWord;
+  }
+
+  public void setIsWord(boolean isWord) {
+    this.isWord = isWord;
+  }
+
+  public boolean hasWord() {
+    return isWord;
   }
 
   public String getValue() {
