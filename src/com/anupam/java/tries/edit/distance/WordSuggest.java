@@ -79,7 +79,10 @@ public class WordSuggest {
   public List<String> wordSuggestion(String word) {
     StringBuilderWithRemove sb = new StringBuilderWithRemove(new StringBuilder());
     List<String> rhymingWords = Lists.newLinkedList();
-    wordSuggestion(word, pTrie.getRoot(), sb, rhymingWords, word.length());
+    int frame[] = new int[word.length()+1];
+    for(int i=0;i<=word.length();i++) 
+      frame[i] = i;
+    wordSuggestionAlternateImpl(word, pTrie.getRoot(), sb, rhymingWords, word.length(),frame);
     return rhymingWords;
   }
 
@@ -105,6 +108,43 @@ public class WordSuggest {
       }
       for (NodeEntry childNode : node.getChildren()) {
         wordSuggestion(toSearch, childNode, sb, rhymingWords, dist);
+      }
+    }
+    sb.discardAt(node.getKey());
+  }
+
+  /**
+   * Recursively searches the words rhyming with the given word
+   *
+   * @param toSearch The word to search.
+   * @param node The node whose key would be searched for possible rhyme.
+   * @param sb The buffer for appending & removing keys at each recursion step.
+   * @param rhymingWords The words rhyming with the given word.
+   * @param levDistLimit
+   */
+  private void wordSuggestionAlternateImpl(String toSearch,
+      NodeEntry node,
+      StringBuilderWithRemove sb,
+      List<String> rhymingWords,
+      int levDistLimit,
+      int[] frame) {
+    sb.append(node.getKey());
+    ++noOfNodesTraversed;
+    // System.out.println(
+    // sb.toString() + "->" + LevenshteinDistance.calculateEditDistance(toSearch, sb.toString()));
+    int[] dist = LevenshteinDistance.incrementalLevDistance(sb.toString(), toSearch, frame);
+    System.out.println(dist[dist.length-1] + " " + sb);
+    if (dist[dist.length - 1] <= levDistLimit) {
+      if (dist[dist.length - 1] <= this.levDistance && node.hasWord()) {
+        rhymingWords.add(sb.toString());
+      }
+      for (NodeEntry childNode : node.getChildren()) {
+        wordSuggestionAlternateImpl(toSearch,
+            childNode,
+            sb,
+            rhymingWords,
+            dist[dist.length - 1],
+            dist);
       }
     }
     sb.discardAt(node.getKey());

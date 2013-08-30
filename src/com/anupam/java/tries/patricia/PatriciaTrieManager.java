@@ -9,7 +9,8 @@ import java.util.List;
  */
 public class PatriciaTrieManager {
 
-  private static final String FILE_PATH = "enter the word list path here";
+  private static final String FILE_PATH =
+      "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/wordsList";
 
   private static final List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
 
