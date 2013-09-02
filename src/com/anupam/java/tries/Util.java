@@ -1,4 +1,6 @@
-package com.anupam.java.tries.simple;
+package com.anupam.java.tries;
+
+import com.anupam.java.tries.simple.NodeEntry;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -57,5 +59,23 @@ public class Util {
         }
       }
     }
+  }
+
+  /**
+   * Generates a count of characters matching between two strings.
+   *
+   * @param to The first string.
+   * @param from The second string.
+   * @return The count of matched characters.
+   */
+  public static int getMatchingCharacterCount(String to, String from) {
+    int matchingCharCount = 0;
+    for (int i = 0; i < Math.min(to.length(), from.length()); i++) {
+      if (to.charAt(i) != from.charAt(i)) {
+        return matchingCharCount;
+      }
+      ++matchingCharCount;
+    }
+    return matchingCharCount;
   }
 }

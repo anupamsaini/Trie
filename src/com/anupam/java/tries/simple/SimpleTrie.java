@@ -1,5 +1,7 @@
 package com.anupam.java.tries.simple;
 
+import com.anupam.java.tries.Util;
+
 
 /**
  * A class for creating Trie data structure from a list of words.

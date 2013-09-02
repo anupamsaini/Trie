@@ -10,14 +10,14 @@ import java.util.List;
 public class PatriciaTrieManager {
 
   private static final String FILE_PATH =
-      "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/wordsList";
+      "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/wlist_match1";
 
   private static final List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
 
   public static final void loadTrie(PatriciaTrie pTrie) {
     long time = System.currentTimeMillis();
     for (String word : words) {
-      pTrie.insertNode(word, "");
+      pTrie.insertWord(word, "");
     }
     System.out.println("Time  taken " + (System.currentTimeMillis() - time));
   }
@@ -27,7 +27,7 @@ public class PatriciaTrieManager {
     int i = 0;
     for (String word : words) {
       ++i;
-      if (!pTrie.searchKey(word)) {
+      if (!pTrie.searchWord(word)) {
         System.out.println("not found " + word + " index " + i);
       }
     }

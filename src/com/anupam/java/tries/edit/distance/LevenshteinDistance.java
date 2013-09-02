@@ -12,13 +12,13 @@ public class LevenshteinDistance {
   /**
    * Calculates the edit distance between two strings.
    *
-   * @param target The target string.
-   * @param other The other string to be compared with.
+   * @param toSearch The target string.
+   * @param probableMatch The other string to be compared with.
    * @return The edit distance between the strings.
    */
-  public static int calculateEditDistance(String target, String other) {
-    int l1 = target.length();
-    int l2 = other.length();
+  public static int editDistance(String toSearch, String probableMatch) {
+    int l1 = toSearch.length();
+    int l2 = probableMatch.length();
     int arr[][] = new int[l1 + 1][l2 + 1];
 
     for (int i = 0; i <= l1; i++) {
@@ -30,8 +30,8 @@ public class LevenshteinDistance {
 
     for (int i = 1; i <= l1; i++) {
       for (int j = 1; j <= l2; j++) {
-        char c1 = target.charAt(i - 1);
-        char c2 = other.charAt(j - 1);
+        char c1 = toSearch.charAt(i - 1);
+        char c2 = probableMatch.charAt(j - 1);
 
         if (c1 == c2) {
           arr[i][j] = arr[i - 1][j - 1];
@@ -40,29 +40,42 @@ public class LevenshteinDistance {
         }
       }
     }
-    // StringBuilder sb = new StringBuilder();
-    // for(int i = 0 ; i <= l1;i++) {
-    // for(int j=0;j<=l2;j++) {
-    // sb.append(arr[i][j]).append(",");
-    // }
-    // sb.append("\n");
-    // }
-    // System.out.println(sb);
     return arr[l1][l2];
   }
 
-  public static int[] incrementalLevDistance(
-      String suffixString, String wordToSearch, int[] frame) {
+  /**
+   * To calculate the edit distance of a character, Immediate last row in the eit distance matrix is
+   * needed. Thus the need for maintainig a matrix of edit distances for each character is
+   * eliminated.
+   * <p>
+   * For instance incremental edit distance between "abh" and "test" at chracter 'a' would be
+   * [0,1,2,3,4], at the next 'b' it would be [1,1,2,3,4]. The edit distance for 'b' used the edit
+   * distances calculated for the 'a' character. Similarily the edit distance for character 'h' only
+   * used the edit distance calculated for 'b'.
+   * </p>
+   *
+   * @param partialMatch The partial string that is to be matched against a word.
+   * @param toSearch The word to be matched against.
+   * @param frame The int array containing edit distance of last character of previously matched
+   *        part of the string.
+   * @return An int array containing the edit distance at the last character in the partial word to
+   *         be matched.
+   */
+  public static int[] editDistance(String partialMatch, String toSearch, int[] frame) {
+
+    int lengthSuffixString = partialMatch.length();
+    if (lengthSuffixString == 0) {
+      return frame;
+    }
     int[] frameCopy = new int[frame.length];
     System.arraycopy(frame, 0, frameCopy, 0, frame.length);
     int[] nextFrame = new int[frameCopy.length];
-    int lengthSuffixString = suffixString.length();
 
     for (int i = 1; i <= lengthSuffixString; i++) {
       nextFrame[0] = frameCopy[0] + 1;
-      for (int j = 1; j <= wordToSearch.length(); j++) {
-        char c1 = suffixString.charAt(i - 1);
-        char c2 = wordToSearch.charAt(j - 1);
+      for (int j = 1; j <= toSearch.length(); j++) {
+        char c1 = partialMatch.charAt(i - 1);
+        char c2 = toSearch.charAt(j - 1);
         if (c1 == c2) {
           nextFrame[j] = frameCopy[j - 1];
         } else {

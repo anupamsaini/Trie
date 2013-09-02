@@ -1,10 +1,9 @@
-package com.anupam.javatests.tries.patricia;
+package com.anupam.javatests.tries;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import com.anupam.java.tries.patricia.Util;
+import com.anupam.java.tries.Util;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

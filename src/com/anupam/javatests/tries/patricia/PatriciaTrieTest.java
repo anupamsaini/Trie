@@ -22,32 +22,32 @@ public class PatriciaTrieTest {
   @Before
   public void setUp() throws Exception {
     pTrie = new PatriciaTrie(new NodeEntry());
-    pTrie.insertNode("\"!exclamation-point", "dummy");
-    pTrie.insertNode("\"close-quote", "dummy");
-    pTrie.insertNode("\"double-quote", "dummy");
-    pTrie.insertNode("\"end-of-quote", "dummy");
-    pTrie.insertNode("\"end-quote", "dummy");
-    pTrie.insertNode("\"in-quotes", "dummy");
-    pTrie.insertNode("rats", "dummy");
+    pTrie.insertWord("\"!exclamation-point", "dummy");
+    pTrie.insertWord("\"close-quote", "dummy");
+    pTrie.insertWord("\"double-quote", "dummy");
+    pTrie.insertWord("\"end-of-quote", "dummy");
+    pTrie.insertWord("\"end-quote", "dummy");
+    pTrie.insertWord("\"in-quotes", "dummy");
+    pTrie.insertWord("rats", "dummy");
   }
 
   @Test
   public void testInsert() {
-    assertTrue(pTrie.insertNode("tuborg", "danish"));
-    assertTrue(pTrie.insertNode("", ""));
-    assertTrue(pTrie.insertNode("a", "aaas"));
-    assertTrue(pTrie.insertNode("zwduuuuuuuuuuuuuuuuuuuuuuufkajsdgf", "aaas"));
+    assertTrue(pTrie.insertWord("tuborg", "danish"));
+    assertTrue(pTrie.insertWord("", ""));
+    assertTrue(pTrie.insertWord("a", "aaas"));
+    assertTrue(pTrie.insertWord("zwduuuuuuuuuuuuuuuuuuuuuuufkajsdgf", "aaas"));
   }
 
   @Test
   public void testSearch() {
-    assertTrue(pTrie.searchKey("\"end-quote"));
+    assertTrue(pTrie.searchWord("\"end-quote"));
   }
 
   @Test
   public void testSearch_NotFound() {
-    assertFalse(pTrie.searchKey("sdjfbsdjfv"));
-    assertFalse(pTrie.searchKey(""));
-    assertFalse(pTrie.searchKey("ratz"));
+    assertFalse(pTrie.searchWord("sdjfbsdjfv"));
+    assertFalse(pTrie.searchWord(""));
+    assertFalse(pTrie.searchWord("ratz"));
   }
 }

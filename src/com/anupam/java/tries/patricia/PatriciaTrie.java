@@ -4,6 +4,8 @@ package com.anupam.java.tries.patricia;
 
 import com.google.common.base.Strings;
 
+import com.anupam.java.tries.Util;
+
 import java.util.ArrayList;
 
 /**
@@ -67,15 +69,15 @@ public class PatriciaTrie {
    * @param value The value or meaning of the word.
    * @return The insert operation's status.
    */
-  public boolean insertNode(String key, String value) {
+  public boolean insertWord(String key, String value) {
     MatchingNodeWrapper matchingNodeWrapper = countMatchingChars(key, rootNode);
     if (matchingNodeWrapper.hasNode()) {
-      return insertNode(rootNode, key, value, 1);
+      return insertWord(rootNode, key, value, 1);
     }
     return insertWhenNoCharsMatch(rootNode, key, value);
   }
 
-  private boolean insertNode(NodeEntry node, String key, String value, int recursionLevel) {
+  private boolean insertWord(NodeEntry node, String key, String value, int recursionLevel) {
     MatchingNodeWrapper matchingNodeWrapper = countMatchingChars(key, node);
     int matchingChars = matchingNodeWrapper.getMatchingCharsCount();
 
@@ -102,7 +104,7 @@ public class PatriciaTrie {
      * node.
      */
     if (Strings.isNullOrEmpty(subString)) {
-      return insertNode(matchingNode, key.substring(matchingChars), value, ++recursionLevel);
+      return insertWord(matchingNode, key.substring(matchingChars), value, ++recursionLevel);
     }
 
     NodeEntry childNode = new NodeEntry(subString, matchingNode.getValue(), true);
@@ -113,7 +115,7 @@ public class PatriciaTrie {
     matchingNode.addChildNode(childNode);
     ++countOfAllocatedNodes;
 
-    return insertNode(matchingNode, key.substring(matchingChars), value, ++recursionLevel);
+    return insertWord(matchingNode, key.substring(matchingChars), value, ++recursionLevel);
   }
 
   /**
@@ -122,11 +124,11 @@ public class PatriciaTrie {
    * @param key The key to be searched.
    * @return The flag indicating search operation's status.
    */
-  public boolean searchKey(String key) throws IllegalStateException {
-    return searchKey(key, rootNode);
+  public boolean searchWord(String key) throws IllegalStateException {
+    return searchWord(key, rootNode);
   }
 
-  private boolean searchKey(String key, NodeEntry node) throws IllegalStateException {
+  private boolean searchWord(String key, NodeEntry node) throws IllegalStateException {
     MatchingNodeWrapper matchingNodeWrapper = countMatchingChars(key, node);
     if (null == matchingNodeWrapper.getNode()) {
       return false;
@@ -137,7 +139,7 @@ public class PatriciaTrie {
       return true;
     } else {
       String subString = key.substring(matchingNodeWrapper.getMatchingCharsCount());
-      return searchKey(subString, matchingNodeWrapper.getNode());
+      return searchWord(subString, matchingNodeWrapper.getNode());
     }
   }
 
