@@ -1,61 +1,61 @@
 <project name="Rhyme" basedir="." default="main">
 
-    <property name="src.dir"     value="../src"/>
+	<property name="src.dir" value="../src" />
 
-    <property name="build.dir"   value="../build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
+	<property name="build.dir" value="../build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jar" />
 
-    <property name="main-class"  value="com.anupam.java.tries.edit.distance.WordSuggest"/>
+	<property name="main-class" value="com.anupam.java.tries.edit.distance.RhymeEngineManager" />
 
-    <property name="lib.dir"     value="../lib"/>
+	<property name="lib.dir" value="../lib" />
 
-    <path id="classpath">
-        <fileset dir="${lib.dir}" includes="**/*.jar"/>
-    </path>
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
 
-    <!-- Clearing build folder -->
-    <target name="clean">
-        <delete dir="${build.dir}"/>
-    </target>
+	<!-- Clearing build folder -->
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
 
-    <!-- Compiling files from the source folder-->
-    <target name="compile">
-        <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}">
-        <classpath>
-             <path refid="classpath"/>
-        </classpath>
-        </javac>
-        <copy todir="${classes.dir}">
-           <fileset dir="${src.dir}" excludes="**/*.java"/>
-        </copy>
-    </target>
+	<!-- Compiling files from the source folder-->
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+			<classpath>
+				<path refid="classpath" />
+			</classpath>
+		</javac>
+		<copy todir="${classes.dir}">
+			<fileset dir="${src.dir}" excludes="**/*.java" />
+		</copy>
+	</target>
 
-    <!--Generating executable jar-->
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar">
-          <fileset dir="${classes.dir}"/>
-             <archives>
-               <zips>
-                 <fileset dir="${lib.dir}" includes="**/*.jar"/>
-               </zips>
-             </archives>
-          <manifest>
-            <attribute name="Main-Class" value="${main-class}"/>
-          </manifest>
-        </jar>
-    </target>
+	<!--Generating executable jar-->
+	<target name="jar" depends="compile">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.dir}/${ant.project.name}.jar">
+			<fileset dir="${classes.dir}" />
+			<archives>
+				<zips>
+					<fileset dir="${lib.dir}" includes="**/*.jar" />
+				</zips>
+			</archives>
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+			</manifest>
+		</jar>
+	</target>
 
-    <target name="run" depends="jar">
-      <java fork="true" jar="${jar.dir}/${ant.project.name}.jar">
-        <classpath>
-           <path refid="classpath"/>
-        </classpath>
-      </java>
-    </target>
+	<target name="run" depends="jar">
+		<java fork="true" jar="${jar.dir}/${ant.project.name}.jar">
+			<classpath>
+				<path refid="classpath" />
+			</classpath>
+		</java>
+	</target>
 
-    <target name="clean-build" depends="clean,jar"/>
-    <target name="main" depends="clean,run"/>
- </project>
+	<target name="clean-build" depends="clean,jar" />
+	<target name="main" depends="clean,run" />
+</project>

@@ -55,9 +55,9 @@ public class RhymeEngine {
   public List<String> generateRhymes(String word) {
     StringBuilderWithRemove sb = new StringBuilderWithRemove(new StringBuilder());
     List<String> rhymingWords = Lists.newLinkedList();
-    int frame[] = new int[word.length() + 1];
+    byte frame[] = new byte[word.length() + 1];
     for (int i = 0; i <= word.length(); i++)
-      frame[i] = i;
+      frame[i] = (byte)i;
     generateRhymes(word, pTrie.getRoot(), sb, rhymingWords, frame);
     // generateRhymes(word,pTrie.getRoot(),sb,rhymingWords,word.length());
     return rhymingWords;
@@ -98,10 +98,10 @@ public class RhymeEngine {
    * @param frame The edit distance at the immediate parent.
    */
   private void generateRhymes(String toSearch, NodeEntry node, StringBuilderWithRemove keyBuffer,
-      List<String> rhymingWords, int[] frame) {
+      List<String> rhymingWords, byte[] frame) {
     keyBuffer.append(node.getKey());
     setNoOfNodesTraversed(getNoOfNodesTraversed() + 1);
-    int[] dist = LevenshteinDistance.editDistance(node.getKey(), toSearch, frame);
+    byte[] dist = LevenshteinDistance.editDistance(node.getKey(), toSearch, frame);
     if (dist[dist.length - 1] <= frame[frame.length - 1]) {
       if (dist[dist.length - 1] <= this.levDistance && node.hasWord()) {
         rhymingWords.add(keyBuffer.toString());

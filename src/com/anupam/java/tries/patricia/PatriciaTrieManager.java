@@ -8,13 +8,11 @@ import java.util.List;
  * Class for managing common trie operations.
  */
 public class PatriciaTrieManager {
-
+  
   private static final String FILE_PATH =
       "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/wlist_match1";
 
-  private static final List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
-
-  public static final void loadTrie(PatriciaTrie pTrie) {
+  public static final void loadWords(PatriciaTrie pTrie, List<String> words) {
     long time = System.currentTimeMillis();
     for (String word : words) {
       pTrie.insertWord(word, "");
@@ -22,7 +20,7 @@ public class PatriciaTrieManager {
     System.out.println("Time  taken " + (System.currentTimeMillis() - time));
   }
 
-  public static final void searchTrie(PatriciaTrie pTrie) {
+  public static final void searchWords(PatriciaTrie pTrie, List<String> words) {
     long time = System.currentTimeMillis();
     int i = 0;
     for (String word : words) {
@@ -35,11 +33,12 @@ public class PatriciaTrieManager {
   }
 
   public static void main(String args[]) {
+    List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
     PatriciaTrie pTrie = new PatriciaTrie(new NodeEntry());
-    loadTrie(pTrie);
+    loadWords(pTrie,words);
     System.out.println("Total allocated nodes :: " + pTrie.getCountOfAllocatedNodes());
     System.out.println(
         "Ratio of nodes to words :: " + (float) pTrie.getCountOfAllocatedNodes() / words.size());
-    searchTrie(pTrie);
+    searchWords(pTrie,words);
   }
 }

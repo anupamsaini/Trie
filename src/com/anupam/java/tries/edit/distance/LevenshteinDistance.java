@@ -1,5 +1,7 @@
 package com.anupam.java.tries.edit.distance;
 
+import java.util.Arrays;
+
 /**
  * Calculates the edit distance between two strings.
  * <p>
@@ -43,6 +45,10 @@ public class LevenshteinDistance {
     return arr[l1][l2];
   }
 
+  private static byte min(byte a, byte b) {
+    return (a <= b) ? a : b;
+  }
+
   /**
    * To calculate the edit distance of a character, Immediate last row in the eit distance matrix is
    * needed. Thus the need for maintainig a matrix of edit distances for each character is
@@ -61,25 +67,26 @@ public class LevenshteinDistance {
    * @return An int array containing the edit distance at the last character in the partial word to
    *         be matched.
    */
-  public static int[] editDistance(String partialMatch, String toSearch, int[] frame) {
+  public static byte[] editDistance(String partialMatch, String toSearch, byte[] frame) {
 
     int lengthSuffixString = partialMatch.length();
     if (lengthSuffixString == 0) {
       return frame;
     }
-    int[] frameCopy = new int[frame.length];
+    byte[] frameCopy = new byte[frame.length];
     System.arraycopy(frame, 0, frameCopy, 0, frame.length);
-    int[] nextFrame = new int[frameCopy.length];
+    byte[] nextFrame = new byte[frameCopy.length];
 
     for (int i = 1; i <= lengthSuffixString; i++) {
-      nextFrame[0] = frameCopy[0] + 1;
+      nextFrame[0] = ++frameCopy[0];
       for (int j = 1; j <= toSearch.length(); j++) {
         char c1 = partialMatch.charAt(i - 1);
         char c2 = toSearch.charAt(j - 1);
         if (c1 == c2) {
           nextFrame[j] = frameCopy[j - 1];
         } else {
-          nextFrame[j] = Math.min(Math.min(nextFrame[j - 1], frameCopy[j]), frameCopy[j - 1]) + 1;
+          byte result = min(min(nextFrame[j - 1], frameCopy[j]), frameCopy[j - 1]);
+          nextFrame[j] = ++result;
         }
       }
       System.arraycopy(nextFrame, 0, frameCopy, 0, frameCopy.length);
