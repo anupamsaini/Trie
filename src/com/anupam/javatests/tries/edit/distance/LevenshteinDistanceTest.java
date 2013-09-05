@@ -36,7 +36,7 @@ public class LevenshteinDistanceTest {
 
   @Test
   public void test_incrementalLevDistance() {
-    int[] frame = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    byte[] frame = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     frame = LevenshteinDistance.editDistance("s", "acrimonious", frame);
     assertEquals(10, frame[frame.length - 1]);
     frame = LevenshteinDistance.editDistance("t", "acrimonious", frame);
@@ -50,7 +50,7 @@ public class LevenshteinDistanceTest {
     assertEquals(8, frame[0]);
   }
 
-  private int[] recIncrement(int frame[], Queue<String> splitWords, String toSearch) {
+  private byte[] recIncrement(byte frame[], Queue<String> splitWords, String toSearch) {
     String toMatch = splitWords.poll();
     if (null == toMatch) {
       return frame;
@@ -65,7 +65,7 @@ public class LevenshteinDistanceTest {
 
   @Test
   public void test_recursiveIncrementingLevDistance() {
-    int frame[] = {0, 1, 2, 3, 4};
+    byte frame[] = {0, 1, 2, 3, 4};
     Queue<String> splitWord = new LinkedList<String>();
     splitWord.add("a");
     splitWord.add("b");
@@ -77,7 +77,7 @@ public class LevenshteinDistanceTest {
 
   @Test
   public void test_incrementalLevDistance_empty() {
-    int[] frame = {0};
+    byte[] frame = {0};
     frame = LevenshteinDistance.editDistance("", "", frame);
     assertEquals(0, frame[0]);
   }

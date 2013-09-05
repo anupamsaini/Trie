@@ -64,7 +64,7 @@ public class LevenshteinDistance {
    * @param toSearch The word to be matched against.
    * @param frame The int array containing edit distance of last character of previously matched
    *        part of the string.
-   * @return An int array containing the edit distance at the last character in the partial word to
+   * @return A byte array containing the edit distance at the last character in the partial word to
    *         be matched.
    */
   public static byte[] editDistance(String partialMatch, String toSearch, byte[] frame) {
@@ -87,6 +87,35 @@ public class LevenshteinDistance {
         } else {
           byte result = min(min(nextFrame[j - 1], frameCopy[j]), frameCopy[j - 1]);
           nextFrame[j] = ++result;
+        }
+      }
+      System.arraycopy(nextFrame, 0, frameCopy, 0, frameCopy.length);
+    }
+    return nextFrame;
+  }
+
+  /**
+   * Uses int as frame type instead of byte.
+   */
+  public static int[] editDistance(String partialMatch, String toSearch, int[] frame) {
+
+    int lengthSuffixString = partialMatch.length();
+    if (lengthSuffixString == 0) {
+      return frame;
+    }
+    int[] frameCopy = new int[frame.length];
+    System.arraycopy(frame, 0, frameCopy, 0, frame.length);
+    int[] nextFrame = new int[frameCopy.length];
+
+    for (int i = 1; i <= lengthSuffixString; i++) {
+      nextFrame[0] = ++frameCopy[0];
+      for (int j = 1; j <= toSearch.length(); j++) {
+        char c1 = partialMatch.charAt(i - 1);
+        char c2 = toSearch.charAt(j - 1);
+        if (c1 == c2) {
+          nextFrame[j] = frameCopy[j - 1];
+        } else {
+          nextFrame[j] = Math.min(Math.min(nextFrame[j - 1], frameCopy[j]), frameCopy[j - 1]) + 1;
         }
       }
       System.arraycopy(nextFrame, 0, frameCopy, 0, frameCopy.length);

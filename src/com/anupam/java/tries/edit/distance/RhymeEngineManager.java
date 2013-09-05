@@ -21,31 +21,44 @@ public class RhymeEngineManager {
     List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
     suggest.setLevDistance(2);
     PatriciaTrieManager.loadWords(suggest.getPTrie(), words);
-    // Scanner in = new Scanner(System.in);
+    if (args.length == 0) {
+      scannerMode(suggest);
+    } else {
+      allWordsSearchMode(words, suggest);
+    }
+  }
+
+  private static void allWordsSearchMode(List<String> words, RhymeEngine suggest) {
     long time = System.currentTimeMillis();
     String value;
     for (String word : words) {
       time = System.currentTimeMillis();
       suggest.setNoOfNodesTraversed(0);
       List<String> rhymes = suggest.generateRhymes(word);
-      System.out.println(" :: " + rhymes.size());
-      System.out.println(" time taken :: " + (System.currentTimeMillis() - time));
-      System.out.println("Total nodes traversed : " + suggest.getNoOfNodesTraversed());
+      System.out.println(word + " --> " + rhymes);
+      System.out.println(" time taken :: " + (System.currentTimeMillis() - time)
+          + "  Total nodes traversed : " + suggest.getNoOfNodesTraversed());
     }
-    // while (true) {
-    // value = in.next();
-    // System.out.println("Fetch suggetions for : " + value);
-    // if (value.equalsIgnoreCase("x")) {
-    // in.close();
-    // System.exit(1);
-    // } else {
-    // time = System.currentTimeMillis();
-    // suggest.setNoOfNodesTraversed(0);
-    // List<String> rhymes = suggest.generateRhymes(value);
-    // System.out.println(" :: " + rhymes.size());
-    // System.out.println(" time taken :: " + (System.currentTimeMillis() - time));
-    // System.out.println("Total nodes traversed : " + suggest.getNoOfNodesTraversed());
-    // }
-    // }
+  }
+
+  private static void scannerMode(RhymeEngine suggest) {
+    long time = System.currentTimeMillis();
+    Scanner in = new Scanner(System.in);
+    String value;
+    while (true) {
+      value = in.next();
+      System.out.println("Fetch suggetions for : " + value);
+      if (value.equalsIgnoreCase("x")) {
+        in.close();
+        System.exit(1);
+      } else {
+        time = System.currentTimeMillis();
+        suggest.setNoOfNodesTraversed(0);
+        List<String> rhymes = suggest.generateRhymes(value);
+        System.out.println(value + " --> " + rhymes);
+        System.out.println(" time taken :: " + (System.currentTimeMillis() - time)
+            + "  Total nodes traversed : " + suggest.getNoOfNodesTraversed());
+      }
+    }
   }
 }

@@ -55,37 +55,12 @@ public class RhymeEngine {
   public List<String> generateRhymes(String word) {
     StringBuilderWithRemove sb = new StringBuilderWithRemove(new StringBuilder());
     List<String> rhymingWords = Lists.newLinkedList();
+    // TODO(anupam) : Length check needed here, can't have words with length greater than 127.
     byte frame[] = new byte[word.length() + 1];
     for (int i = 0; i <= word.length(); i++)
-      frame[i] = (byte)i;
+      frame[i] = (byte) i;
     generateRhymes(word, pTrie.getRoot(), sb, rhymingWords, frame);
-    // generateRhymes(word,pTrie.getRoot(),sb,rhymingWords,word.length());
     return rhymingWords;
-  }
-
-  /**
-   * Recursively searches the words rhyming with the given word.
-   *
-   * @param toSearch The word whose rhymes are to be generated.
-   * @param node The node whose key would be searched for possible rhyme.
-   * @param keyBuffer The buffer for appending & removing keys at each step of recursion.
-   * @param rhymingWords A list of words rhyming with the given word.
-   * @param levDistLimit The maximum possible delta in edit distances.
-   */
-  private void generateRhymes(String toSearch, NodeEntry node, StringBuilderWithRemove keyBuffer,
-      List<String> rhymingWords, int levDistLimit) {
-    keyBuffer.append(node.getKey());
-    setNoOfNodesTraversed(getNoOfNodesTraversed() + 1);
-    int dist = LevenshteinDistance.editDistance(toSearch, keyBuffer.toString());
-    if (dist <= levDistLimit) {
-      if (dist <= this.levDistance && node.hasWord()) {
-        rhymingWords.add(keyBuffer.toString());
-      }
-      for (NodeEntry childNode : node.getChildren()) {
-        generateRhymes(toSearch, childNode, keyBuffer, rhymingWords, dist);
-      }
-    }
-    keyBuffer.discardAt(node.getKey());
   }
 
   /**
@@ -104,6 +79,32 @@ public class RhymeEngine {
     byte[] dist = LevenshteinDistance.editDistance(node.getKey(), toSearch, frame);
     if (dist[dist.length - 1] <= frame[frame.length - 1]) {
       if (dist[dist.length - 1] <= this.levDistance && node.hasWord()) {
+        rhymingWords.add(keyBuffer.toString());
+      }
+      for (NodeEntry childNode : node.getChildren()) {
+        generateRhymes(toSearch, childNode, keyBuffer, rhymingWords, dist);
+      }
+    }
+    keyBuffer.discardAt(node.getKey());
+  }
+
+  /**
+   * Recursively searches the words rhyming with the given word. This is a slower implementation as
+   * it calculates edit distances from begning in a tree path.
+   *
+   * @param toSearch The word whose rhymes are to be generated.
+   * @param node The node whose key would be searched for possible rhyme.
+   * @param keyBuffer The buffer for appending & removing keys at each step of recursion.
+   * @param rhymingWords A list of words rhyming with the given word.
+   * @param levDistLimit The maximum possible delta in edit distances.
+   */
+  protected void generateRhymes(String toSearch, NodeEntry node, StringBuilderWithRemove keyBuffer,
+      List<String> rhymingWords, int levDistLimit) {
+    keyBuffer.append(node.getKey());
+    setNoOfNodesTraversed(getNoOfNodesTraversed() + 1);
+    int dist = LevenshteinDistance.editDistance(toSearch, keyBuffer.toString());
+    if (dist <= levDistLimit) {
+      if (dist <= this.levDistance && node.hasWord()) {
         rhymingWords.add(keyBuffer.toString());
       }
       for (NodeEntry childNode : node.getChildren()) {
