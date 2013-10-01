@@ -3,6 +3,7 @@ package com.anupam.javatests.tries.patricia;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.anupam.java.tries.Node;
 import com.anupam.java.tries.patricia.NodeEntry;
 import com.anupam.java.tries.patricia.PatriciaTrie;
 
@@ -10,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test case for {@link PatriciaTrie}.
+ * Test case for {@link Node}.
  */
 public class PatriciaTrieTest {
 

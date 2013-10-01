@@ -3,21 +3,14 @@ package com.anupam.java.tries.edit.distance;
 import com.google.common.collect.Lists;
 
 import com.anupam.java.tries.patricia.NodeEntry;
-import com.anupam.java.tries.patricia.PatriciaTrie;
-import com.anupam.java.tries.patricia.PatriciaTrieManager;
 
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Finds words rhyming with a given word.
  */
 public class RhymeEngine {
 
-  /**
-   * The tree representation of the words dictionary.
-   */
-  private final PatriciaTrie pTrie;
   /**
    * The maximum allowed distance between two strings.
    */
@@ -26,12 +19,13 @@ public class RhymeEngine {
   // Stats on number of nodes travered while searching for rhymes.
   private int noOfNodesTraversed = 0;
 
-  public RhymeEngine(PatriciaTrie pTire) {
-    this.pTrie = pTire;
-  }
+  // The root node of the trie representation of the word list.
+  private NodeEntry rootNode;
 
-  public PatriciaTrie getPTrie() {
-    return this.pTrie;
+  public RhymeEngine() {}
+
+  public RhymeEngine(NodeEntry rootNode) {
+    this.rootNode = rootNode;
   }
 
   public int getNoOfNodesTraversed() {
@@ -44,6 +38,14 @@ public class RhymeEngine {
 
   public void setLevDistance(int levDistance) {
     this.levDistance = levDistance;
+  }
+
+  public NodeEntry getRootNode() {
+    return rootNode;
+  }
+
+  public void setRootNode(NodeEntry rootNode) {
+    this.rootNode = rootNode;
   }
 
   /**
@@ -59,7 +61,7 @@ public class RhymeEngine {
     byte frame[] = new byte[word.length() + 1];
     for (int i = 0; i <= word.length(); i++)
       frame[i] = (byte) i;
-    generateRhymes(word, pTrie.getRoot(), sb, rhymingWords, frame);
+    generateRhymes(word, this.rootNode, sb, rhymingWords, frame);
     return rhymingWords;
   }
 

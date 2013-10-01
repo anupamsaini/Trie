@@ -23,7 +23,7 @@ public class LevenshteinDistanceTest {
 
   @Test
   public void test_calculateEditDistance() {
-    assertEquals(3, LevenshteinDistance.editDistance("kitten", "sitting"));
+    assertEquals(5, LevenshteinDistance.editDistance("please", "squeeze"));
     assertEquals(3, LevenshteinDistance.editDistance("saturday", "sunday"));
     assertEquals(0, LevenshteinDistance.editDistance("sunday", "sunday"));
     assertEquals(3, LevenshteinDistance.editDistance("StackOverflow", "StackUnderflow"));

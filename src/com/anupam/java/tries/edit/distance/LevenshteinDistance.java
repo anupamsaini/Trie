@@ -1,6 +1,5 @@
 package com.anupam.java.tries.edit.distance;
 
-import java.util.Arrays;
 
 /**
  * Calculates the edit distance between two strings.
