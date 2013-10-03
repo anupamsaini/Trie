@@ -6,6 +6,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.anupam.java.tries.patricia.NodeEntry;
 import com.anupam.java.tries.patricia.PatriciaTrie;
 
+import org.apache.log4j.Logger;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -17,6 +19,8 @@ import java.util.concurrent.Future;
  */
 public class ConcurrentRhymeEngine {
 
+  private static final Logger log = Logger.getLogger(ConcurrentRhymeEngine.class);
+
   /**
    * The tree representation of the words dictionary.
    */
@@ -24,9 +28,10 @@ public class ConcurrentRhymeEngine {
 
   private final ExecutorService service;
 
-  // TODO : Processor core count affected by hyper threading, might not be right way on Android
-  // phones.
+  // TODO :anupam Processor core count affected by hyper threading, might not be right way on
+  // Android phones.
   private final int poolSize = Runtime.getRuntime().availableProcessors();
+
   /**
    * The maximum allowed distance between two strings.
    */
@@ -35,6 +40,8 @@ public class ConcurrentRhymeEngine {
   public ConcurrentRhymeEngine(PatriciaTrie pTire, int levDistance) {
     this.pTrie = pTire;
     this.levDistance = levDistance;
+    // TODO:anupam Won't work in a case of many concurrent requests. The work queue size should be
+    // bounded.
     service = Executors.newFixedThreadPool(poolSize, new ThreadFactoryBuilder().setDaemon(false)
         .setNameFormat(ConcurrentRhymeEngine.class.getSimpleName() + " -%s").build());
   }
@@ -58,8 +65,8 @@ public class ConcurrentRhymeEngine {
    */
   public List<String> generateRhymes(String word) {
     List<Future<List<String>>> rhymes = Lists.newArrayList();
-
-    for (int i = 0; i < this.pTrie.getRoot().getChildren().size(); i++) {
+    int childrenCount = this.pTrie.getRoot().getChildren().size();
+    for (int i = 0; i < childrenCount; i = i + poolSize) {
       rhymes.add(service.submit(
           new RhymeWorker(pTrie.getRoot(), new SearchBatch(word, this.levDistance, i))));
     }
@@ -69,7 +76,7 @@ public class ConcurrentRhymeEngine {
       try {
         collatedOutput.addAll(data.get());
       } catch (InterruptedException | ExecutionException e) {
-        e.printStackTrace();
+        log.error(e);
       }
     }
     return collatedOutput;

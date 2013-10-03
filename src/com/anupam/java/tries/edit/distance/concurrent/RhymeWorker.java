@@ -1,7 +1,11 @@
 package com.anupam.java.tries.edit.distance.concurrent;
 
+import com.google.common.collect.Lists;
+
 import com.anupam.java.tries.edit.distance.RhymeEngine;
 import com.anupam.java.tries.patricia.NodeEntry;
+
+import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -10,6 +14,8 @@ import java.util.concurrent.Callable;
  * The worker for searching the subsection of a trie for rhymes.
  */
 public class RhymeWorker implements Callable<List<String>> {
+
+  private static final Logger log = Logger.getLogger(RhymeWorker.class);
 
   private final NodeEntry rootNode;
   private final SearchBatch searchBatch;
@@ -23,12 +29,16 @@ public class RhymeWorker implements Callable<List<String>> {
   public List<String> call() {
     RhymeEngine rhymeEngine = new RhymeEngine();
     rhymeEngine.setLevDistance(searchBatch.getLevDistance());
-    rhymeEngine.setRootNode(rootNode.getChildren().get(searchBatch.getIndexInRootNode()));
-    //long time = System.nanoTime();
-    List<String> rhymes = rhymeEngine.generateRhymes(searchBatch.getWord());
-    // System.out.println("time in this segment " + Thread.currentThread().getName() + " : " +
-    // + (System.nanoTime() - time));
+    int indexInRoot = searchBatch.getIndexInRootNode();
+    List<String> rhymes = Lists.newLinkedList();
+    for (int i = indexInRoot; i < indexInRoot + Runtime.getRuntime().availableProcessors()
+        && i < rootNode.getChildren().size(); i++) {
+      long time = System.currentTimeMillis();
+      rhymeEngine.setRootNode(rootNode.getChildren().get(i));
+      rhymes = rhymeEngine.generateRhymes(searchBatch.getWord());
+      log.debug("Worked on the tree path : " + rootNode.getChildren().get(i).getKey()
+          + ", Time consumed : " + (System.currentTimeMillis() - time));
+    }
     return rhymes;
-
   }
 }

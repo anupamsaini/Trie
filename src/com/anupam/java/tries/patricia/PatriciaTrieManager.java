@@ -2,13 +2,17 @@ package com.anupam.java.tries.patricia;
 
 import com.anupam.java.tries.simple.SimpleTrieGenerator;
 
+import org.apache.log4j.Logger;
+
 import java.util.List;
 
 /**
  * Class for managing common trie operations.
  */
 public class PatriciaTrieManager {
-  
+
+  private static final Logger log = Logger.getLogger(PatriciaTrieManager.class);
+
   private static final String FILE_PATH =
       "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/wlist_match1";
 
@@ -17,7 +21,7 @@ public class PatriciaTrieManager {
     for (String word : words) {
       pTrie.insertWord(word, "");
     }
-    System.out.println("Time  taken " + (System.currentTimeMillis() - time));
+    log.info("Time  taken " + (System.currentTimeMillis() - time));
   }
 
   public static final void searchWords(PatriciaTrie pTrie, List<String> words) {
@@ -26,19 +30,19 @@ public class PatriciaTrieManager {
     for (String word : words) {
       ++i;
       if (!pTrie.searchWord(word)) {
-        System.out.println("not found " + word + " index " + i);
+        log.info("not found " + word + " index " + i);
       }
     }
-    System.out.println("Time  taken " + (System.currentTimeMillis() - time));
+    log.info("Time  taken " + (System.currentTimeMillis() - time));
   }
 
   public static void main(String args[]) {
     List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
     PatriciaTrie pTrie = new PatriciaTrie(new NodeEntry());
-    loadWords(pTrie,words);
-    System.out.println("Total allocated nodes :: " + pTrie.getCountOfAllocatedNodes());
-    System.out.println(
+    loadWords(pTrie, words);
+    log.info("Total allocated nodes :: " + pTrie.getCountOfAllocatedNodes());
+    log.info(
         "Ratio of nodes to words :: " + (float) pTrie.getCountOfAllocatedNodes() / words.size());
-    searchWords(pTrie,words);
+    searchWords(pTrie, words);
   }
 }
