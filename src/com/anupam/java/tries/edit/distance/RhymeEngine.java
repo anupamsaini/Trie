@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 
 import com.anupam.java.tries.patricia.NodeEntry;
 
+import org.apache.log4j.Logger;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ import java.util.List;
  */
 public class RhymeEngine {
 
+  private static final Logger log = Logger.getLogger(RhymeEngine.class);
   /**
    * The maximum allowed distance between two strings.
    */

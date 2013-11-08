@@ -14,7 +14,7 @@ public class PatriciaTrieManager {
   private static final Logger log = Logger.getLogger(PatriciaTrieManager.class);
 
   private static final String FILE_PATH =
-      "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/wlist_match1";
+      "<Path to file>";
 
   public static final void loadWords(PatriciaTrie pTrie, List<String> words) {
     long time = System.currentTimeMillis();

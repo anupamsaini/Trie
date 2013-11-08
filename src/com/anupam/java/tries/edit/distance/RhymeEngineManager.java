@@ -19,7 +19,7 @@ public class RhymeEngineManager {
   private static final Logger log = Logger.getLogger(RhymeEngineManager.class);
 
   private static final String FILE_PATH =
-      "/usr/local/google/home/anupams/beltway-workspace_22APril/SomethingCreative/words/randomWords";
+      "<Path to file>";
 
   public static void main(String[] args) {
     List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
