@@ -1,15 +1,16 @@
 package com.anupam.java.tries.edit.distance;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Scanner;
+
+import org.apache.log4j.Logger;
+
 import com.anupam.java.tries.edit.distance.concurrent.ConcurrentRhymeEngine;
 import com.anupam.java.tries.patricia.NodeEntry;
 import com.anupam.java.tries.patricia.PatriciaTrie;
 import com.anupam.java.tries.patricia.PatriciaTrieManager;
 import com.anupam.java.tries.simple.SimpleTrieGenerator;
-
-import org.apache.log4j.Logger;
-
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * Entry point for generating rhymes of a word.
@@ -19,22 +20,25 @@ public class RhymeEngineManager {
   private static final Logger log = Logger.getLogger(RhymeEngineManager.class);
 
   private static final String FILE_PATH =
-      "<Path to file>";
+      "/home/anupams/linux/git/Trie/words/wlist_match1";
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
+    CliArguments arguments = new CliArguments(args);
+
     List<String> words = SimpleTrieGenerator.readWords(FILE_PATH);
     PatriciaTrie trie = new PatriciaTrie(new NodeEntry("", "", false));
     PatriciaTrieManager.loadWords(trie, words);
-    String mode;
-    if (args.length > 1) {
-      mode = args[1];
-      if (mode.equalsIgnoreCase("a")) {
-        allWordsSearchMode(words, trie, Integer.valueOf(args[0]));
-      } else if (mode.equalsIgnoreCase("c")) {
-        concurrentMode(trie, Integer.valueOf(args[0]));
-      }
-    } else {
-      scannerMode(trie, Integer.valueOf(args[0]));
+    switch (arguments.mode) {
+      case "s":
+        scannerMode(trie, arguments.editDistance);
+        break;
+      case "a":
+        allWordsSearchMode(words, trie, arguments.editDistance);
+        break;
+      case "c":
+        concurrentMode(trie, arguments.editDistance);
+      default:
+        throw new IllegalArgumentException(" No mode of operation provided");
     }
   }
 
@@ -63,7 +67,6 @@ public class RhymeEngineManager {
   private static void allWordsSearchMode(List<String> words, PatriciaTrie trie, int levDistance) {
     ConcurrentRhymeEngine concRhymeEngine = new ConcurrentRhymeEngine(trie, levDistance);
     long time = System.currentTimeMillis();
-    String value;
     for (String word : words) {
       time = System.currentTimeMillis();
       concRhymeEngine.generateRhymes(word);
