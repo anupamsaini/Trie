@@ -26,7 +26,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>com.anupam.rhyme.tries.edit.distance.RhymeEngineManager</mainClass>
+                  <mainClass>com.anupam.rhymeengine.RhymeEngineManager</mainClass>
                 </transformer>
               </transformers>
             </configuration>
